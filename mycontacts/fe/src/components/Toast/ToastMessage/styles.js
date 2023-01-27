@@ -23,6 +23,10 @@ export const Container = styled.div`
     justify-content: center;
     cursor: pointer;
 
+    &:focus {
+      background: purple;
+    }
+
     ${containerVariants[type] || containerVariants.default}
 
     & + & {
