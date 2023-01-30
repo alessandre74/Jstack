@@ -34,6 +34,8 @@ export function Home() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false)
+  const [contactBeingDelete, setContactBeingDelete] = useState(null)
 
   const filteredContacts = useMemo(() => {
     return contacts.filter((contact) =>
@@ -72,19 +74,29 @@ export function Home() {
     loadingContacts()
   }
 
+  function handleDeleteContact(contact) {
+    setIsDeleteModalVisible(true)
+    setContactBeingDelete(contact)
+  }
+
+  function handleCloseDeleteModal() {
+    setIsDeleteModalVisible(false)
+  }
+
+  function handelConfirmDeleteContact() {}
+
   return (
     <Container>
       <Loader isLoading={isLoading} />
       <Modal
         danger
-        title="Tem ceterza que deseja remover o contato?"
+        visible={isDeleteModalVisible}
+        title={`Tem certe za que deseja remover o contato "${contactBeingDelete?.name}"`}
         confirmLabel="Deletar"
-        onCancel={() => alert('Cancelou')}
-        onConfirm={() => alert('Deletou')}
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handelConfirmDeleteContact}
       >
-        <h2>Mike</h2>
-        <strong>Bebezinho</strong>
-        <p>Lindo</p>
+        <p>Esta ação não poderá ser desfeita!</p>
       </Modal>
 
       {contacts.length > 0 && (
@@ -181,7 +193,10 @@ export function Home() {
                   <img src={edit} alt="Edit" />
                 </Link>
 
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => handleDeleteContact(contact)}
+                >
                   <img src={trash} alt="Delete" />
                 </button>
               </div>

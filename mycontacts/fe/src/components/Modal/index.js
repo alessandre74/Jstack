@@ -11,8 +11,13 @@ export function Modal({
   cancelLabel,
   confirmLabel,
   onCancel,
-  onConfirm
+  onConfirm,
+  visible
 }) {
+  if (!visible) {
+    return null
+  }
+
   return ReactDOM.createPortal(
     <Overlay>
       <Container danger={danger}>
