@@ -2,7 +2,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
-import { formatPhone } from '../../utils'
+import { formatPhone, toast } from '../../utils'
 
 import { Loader } from '../../components/Loader'
 import { Button } from '../../components/Button'
@@ -36,6 +36,7 @@ export function Home() {
   const [hasError, setHasError] = useState(false)
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false)
   const [contactBeingDelete, setContactBeingDelete] = useState(null)
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 
   const filteredContacts = useMemo(() => {
     return contacts.filter((contact) =>
@@ -81,15 +82,40 @@ export function Home() {
 
   function handleCloseDeleteModal() {
     setIsDeleteModalVisible(false)
+    setContactBeingDelete(null)
   }
 
-  function handelConfirmDeleteContact() {}
+  async function handelConfirmDeleteContact() {
+    try {
+      setIsLoadingDelete(true)
+      await ContactsService.deleteContact(contactBeingDelete.id)
+
+      setContacts((prevState) =>
+        prevState.filter((contact) => contact.id !== contactBeingDelete.id)
+      )
+
+      handleCloseDeleteModal()
+
+      toast({
+        type: 'success',
+        text: 'Contato deletado com sucesso!'
+      })
+    } catch {
+      toast({
+        type: 'danger',
+        text: 'Ocorreu um erro ao deletar o contato!'
+      })
+    } finally {
+      setIsLoadingDelete(false)
+    }
+  }
 
   return (
     <Container>
       <Loader isLoading={isLoading} />
       <Modal
         danger
+        isLoading={isLoadingDelete}
         visible={isDeleteModalVisible}
         title={`Tem certe za que deseja remover o contato "${contactBeingDelete?.name}"`}
         confirmLabel="Deletar"
