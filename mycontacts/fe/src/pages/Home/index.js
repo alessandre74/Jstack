@@ -6,6 +6,7 @@ import { formatPhone } from '../../utils'
 
 import { Loader } from '../../components/Loader'
 import { Button } from '../../components/Button'
+import { Modal } from '../../components/Modal'
 
 import arrow from '../../assets/images/arrow.svg'
 import edit from '../../assets/images/edit.svg'
@@ -74,6 +75,17 @@ export function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+      <Modal
+        danger
+        title="Tem ceterza que deseja remover o contato?"
+        confirmLabel="Deletar"
+        onCancel={() => alert('Cancelou')}
+        onConfirm={() => alert('Deletou')}
+      >
+        <h2>Mike</h2>
+        <strong>Bebezinho</strong>
+        <p>Lindo</p>
+      </Modal>
 
       {contacts.length > 0 && (
         <InputSearchContainer>

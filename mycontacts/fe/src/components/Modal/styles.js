@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 export const Overlay = styled.div`
   background: ${({ theme }) => theme.colors.modal};
   backdrop-filter: blur(5px);
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0;
@@ -21,13 +21,13 @@ export const Container = styled.div`
     padding: 24px;
     box-shadow: ${theme.colors.boxshadow};
 
-    h1 {
+    > h1 {
       font-size: 22px;
       color: ${danger ? theme.colors.danger.main : theme.colors.gray[900]};
     }
 
-    p {
-      margin-top: 8px;
+    .modal-body {
+      margin-top: 32px;
     }
   `}
 `
@@ -42,7 +42,7 @@ export const Footer = styled.footer`
     background: transparent;
     border: none;
     font-size: 16px;
-    margin-right: 8px;
+    margin-right: 24px;
     color: ${({ theme }) => theme.colors.gray[200]};
   }
 `

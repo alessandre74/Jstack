@@ -4,20 +4,28 @@ import PropTyes from 'prop-types'
 import { Button } from '../Button'
 import { Container, Overlay, Footer } from './styles'
 
-export function Modal({ danger }) {
+export function Modal({
+  danger,
+  title,
+  children,
+  cancelLabel,
+  confirmLabel,
+  onCancel,
+  onConfirm
+}) {
   return ReactDOM.createPortal(
     <Overlay>
       <Container danger={danger}>
-        <h1>Titulo do Modal</h1>
+        <h1>{title}</h1>
 
-        <p>Corpo do modal</p>
+        <div className="modal-body">{children}</div>
 
         <Footer>
-          <button type="button" className="cancel-button">
-            Cancelar
+          <button onClick={onCancel} type="button" className="cancel-button">
+            {cancelLabel}
           </button>
-          <Button type="button" danger={danger}>
-            Deletar
+          <Button onClick={onConfirm} type="button" danger={danger}>
+            {confirmLabel}
           </Button>
         </Footer>
       </Container>
@@ -26,9 +34,17 @@ export function Modal({ danger }) {
   )
 }
 Modal.propTypes = {
-  danger: PropTyes.bool.isRequired
+  danger: PropTyes.bool.isRequired,
+  title: PropTyes.string.isRequired,
+  children: PropTyes.node.isRequired,
+  cancelLabel: PropTyes.string,
+  confirmLabel: PropTyes.string,
+  onCancel: PropTyes.func.isRequired,
+  onConfirm: PropTyes.func.isRequired
 }
 
 Modal.defaultProps = {
-  danger: false
+  danger: false,
+  cancelLabel: 'Cancelar',
+  confirmLabel: 'Confirmar'
 }
