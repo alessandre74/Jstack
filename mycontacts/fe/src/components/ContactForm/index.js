@@ -14,6 +14,7 @@ import { useErrors } from '../../hooks/useErrors'
 
 import { Form, ButtonContainer } from './styles'
 import { isEmailValid, formatPhone } from '../../utils'
+import { useSafeAsyncState } from '../../hooks/useSafeAsyncState'
 
 import CategoriesService from '../../services/CategoriesServices'
 
@@ -22,8 +23,8 @@ export const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [categoryId, setCategoryId] = useState('')
-  const [categories, setCategories] = useState([])
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true)
+  const [categories, setCategories] = useSafeAsyncState([])
+  const [isLoadingCategories, setIsLoadingCategories] = useSafeAsyncState(true)
   const [isSubmitting, setIsSubmiting] = useState(false)
 
   const { errors, setError, removeError, getErrorMessageByFieldName } =
@@ -63,7 +64,7 @@ export const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
     }
 
     loadingCategories()
-  }, [])
+  }, [setCategories, setIsLoadingCategories])
 
   function handleNameChange(event) {
     setName(event.target.value)
