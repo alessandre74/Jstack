@@ -16,7 +16,7 @@ import { Form, ButtonContainer } from './styles'
 import { isEmailValid, formatPhone } from '../../utils'
 import { useSafeAsyncState } from '../../hooks/useSafeAsyncState'
 
-import CategoriesService from '../../services/CategoriesServices'
+import CategoriesService from '../../services/CategoriesService'
 
 export const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [name, setName] = useState('')

@@ -3,6 +3,7 @@ import { formatPhone, unFormatPhone } from '../../utils'
 class ContactMapper {
   toPersistence(domainContact) {
     return {
+      id: domainContact.id,
       name: domainContact.name,
       email: domainContact.email,
       phone: unFormatPhone(domainContact.phone),
