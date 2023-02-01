@@ -1,7 +1,5 @@
-import { toast } from './_toast'
-import { delay } from './_delay'
-import { formatPhone } from './_formatPhone'
-import { unFormatPhone } from './_unFormatPhone'
-import { isEmailValid } from './_isEmailValid'
-
-export { toast, delay, formatPhone, unFormatPhone, isEmailValid }
+export { toast } from './_toast'
+export { delay } from './_delay'
+export { formatPhone } from './_formatPhone'
+export { unFormatPhone } from './_unFormatPhone'
+export { isEmailValid } from './_isEmailValid'
