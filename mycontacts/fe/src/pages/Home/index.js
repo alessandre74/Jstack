@@ -1,13 +1,10 @@
 /* eslint-disable no-nested-ternary */
-import { useEffect, useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-
-import { formatPhone, toast } from '../../utils'
-
+import { useHome } from './useHome'
+import { formatPhone } from '../../utils'
 import { Loader } from '../../components/Loader'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
-
 import arrow from '../../assets/images/arrow.svg'
 import edit from '../../assets/images/edit.svg'
 import trash from '../../assets/images/trash.svg'
@@ -15,200 +12,107 @@ import sad from '../../assets/images/sad.svg'
 import emptyBox from '../../assets/images/empty-box.svg'
 import magnifierQuestion from '../../assets/images/magnifier-question.svg'
 
-import {
-  Container,
-  InputSearchContainer,
-  Header,
-  Card,
-  ListHeader,
-  ErrorContainer,
-  EmptyListContainer,
-  SearchNotFoundContainer
-} from './styles'
-
-import ContactsService from '../../services/ContactsService'
+import * as S from './styles'
 
 export function Home() {
-  const [contacts, setContacts] = useState([])
-  const [orderBy, setOrderBy] = useState('asc')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false)
-  const [contactBeingDelete, setContactBeingDelete] = useState(null)
-  const [isLoadingDelete, setIsLoadingDelete] = useState(false)
-
-  const filteredContacts = useMemo(() => {
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  }, [contacts, searchTerm])
-
-  const loadingContacts = useCallback(async () => {
-    try {
-      setIsLoading(true)
-
-      const contactList = await ContactsService.listContacts(orderBy)
-
-      setHasError(false)
-      setContacts(contactList)
-    } catch (error) {
-      setHasError(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [orderBy])
-
-  useEffect(() => {
-    loadingContacts()
-  }, [loadingContacts])
-
-  function handleToggleOrderBy() {
-    setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'))
-  }
-
-  function handleChangeSearchTerm(event) {
-    setSearchTerm(event.target.value)
-  }
-
-  function handleTryAgain() {
-    loadingContacts()
-  }
-
-  function handleDeleteContact(contact) {
-    setIsDeleteModalVisible(true)
-    setContactBeingDelete(contact)
-  }
-
-  function handleCloseDeleteModal() {
-    setIsDeleteModalVisible(false)
-    setContactBeingDelete(null)
-  }
-
-  async function handelConfirmDeleteContact() {
-    try {
-      setIsLoadingDelete(true)
-      await ContactsService.deleteContact(contactBeingDelete.id)
-
-      setContacts((prevState) =>
-        prevState.filter((contact) => contact.id !== contactBeingDelete.id)
-      )
-
-      handleCloseDeleteModal()
-
-      toast({
-        type: 'success',
-        text: 'Contato deletado com sucesso!'
-      })
-    } catch {
-      toast({
-        type: 'danger',
-        text: 'Ocorreu um erro ao deletar o contato!'
-      })
-    } finally {
-      setIsLoadingDelete(false)
-    }
-  }
+  const hook = useHome()
 
   return (
-    <Container>
-      <Loader isLoading={isLoading} />
+    <S.Container>
+      <Loader isLoading={hook.isLoading} />
       <Modal
         danger
-        isLoading={isLoadingDelete}
-        visible={isDeleteModalVisible}
-        title={`Tem certe za que deseja remover o contato "${contactBeingDelete?.name}"`}
+        isLoading={hook.isLoadingDelete}
+        visible={hook.isDeleteModalVisible}
+        title={`Tem certe za que deseja remover o contato "${hook.contactBeingDelete?.name}"`}
         confirmLabel="Deletar"
-        onCancel={handleCloseDeleteModal}
-        onConfirm={handelConfirmDeleteContact}
+        onCancel={hook.handleCloseDeleteModal}
+        onConfirm={hook.handelConfirmDeleteContact}
       >
         <p>Esta ação não poderá ser desfeita!</p>
       </Modal>
 
-      {contacts.length > 0 && (
-        <InputSearchContainer>
+      {hook.contacts.length > 0 && (
+        <S.InputSearchContainer>
           <input
-            value={searchTerm}
+            value={hook.searchTerm}
             type="text"
             placeholder="Pesquisar pelo nome..."
-            onChange={handleChangeSearchTerm}
+            onChange={hook.handleChangeSearchTerm}
           />
-        </InputSearchContainer>
+        </S.InputSearchContainer>
       )}
 
-      <Header
+      <S.Header
         justifyContent={
-          hasError
+          hook.hasError
             ? 'flex-end'
-            : contacts.length > 0
+            : hook.contacts.length > 0
             ? 'space-between'
             : 'center'
         }
       >
-        {!hasError && contacts.length > 0 && (
+        {!hook.hasError && hook.contacts.length > 0 && (
           <strong>
-            {filteredContacts.length}
-            {filteredContacts.length === 1 ? ' contato' : ' contatos'}
+            {hook.filteredContacts.length}
+            {hook.filteredContacts.length === 1 ? ' contato' : ' contatos'}
           </strong>
         )}
         <Link to="/new">Novo contato</Link>
-      </Header>
+      </S.Header>
 
-      {hasError && (
-        <ErrorContainer>
+      {hook.hasError && (
+        <S.ErrorContainer>
           <img src={sad} alt="Sad" />
 
           <div className="details">
             <strong>Ocorreu um erro ao obter os seus contatos!</strong>
 
-            <Button type="button" onClick={handleTryAgain}>
+            <Button type="button" onClick={hook.handleTryAgain}>
               Tentar novamente
             </Button>
           </div>
-        </ErrorContainer>
+        </S.ErrorContainer>
       )}
 
-      {!hasError && (
+      {!hook.hasError && (
         <>
-          {contacts.length < 1 && !isLoading && (
-            <EmptyListContainer>
+          {hook.contacts.length < 1 && !hook.isLoading && (
+            <S.EmptyListContainer>
               <img src={emptyBox} alt="Empty Box" />
 
               <p>
                 Você ainda não tem nenhum contato cadastrado! Clique no botão
-                <strong> ”Novo contato” </strong> à cima para cadastrar o seu
-                primeiro!
+                <strong> ”Novo contato” </strong> à cima para cadastrar o seu primeiro!
               </p>
-            </EmptyListContainer>
+            </S.EmptyListContainer>
           )}
 
-          {contacts.length > 0 && filteredContacts.length < 1 && (
-            <SearchNotFoundContainer>
+          {hook.contacts.length > 0 && hook.filteredContacts.length < 1 && (
+            <S.SearchNotFoundContainer>
               <img src={magnifierQuestion} alt="Magnifier question" />
               <span>
                 Nenhum resultado foi encontrado para
-                <strong> {searchTerm}.</strong>
+                <strong> {hook.searchTerm}.</strong>
               </span>
-            </SearchNotFoundContainer>
+            </S.SearchNotFoundContainer>
           )}
 
-          {filteredContacts.length > 0 && (
-            <ListHeader orderBy={orderBy}>
-              <button type="button" onClick={handleToggleOrderBy}>
+          {hook.filteredContacts.length > 0 && (
+            <S.ListHeader orderBy={hook.orderBy}>
+              <button type="button" onClick={hook.handleToggleOrderBy}>
                 <span>Nome</span>
                 <img src={arrow} alt="Arrow" />
               </button>
-            </ListHeader>
+            </S.ListHeader>
           )}
 
-          {filteredContacts.map((contact) => (
-            <Card key={contact.id}>
+          {hook.filteredContacts.map((contact) => (
+            <S.Card key={contact.id}>
               <div className="info">
                 <div className="contact-name">
                   <strong>{contact.name}</strong>
-                  {contact.category.name && (
-                    <small>{contact.category.name}</small>
-                  )}
+                  {contact.category.name && <small>{contact.category.name}</small>}
                 </div>
                 <span>{contact.email}</span>
                 <span>{formatPhone(contact.phone)}</span>
@@ -219,17 +123,14 @@ export function Home() {
                   <img src={edit} alt="Edit" />
                 </Link>
 
-                <button
-                  type="button"
-                  onClick={() => handleDeleteContact(contact)}
-                >
+                <button type="button" onClick={() => hook.handleDeleteContact(contact)}>
                   <img src={trash} alt="Delete" />
                 </button>
               </div>
-            </Card>
+            </S.Card>
           ))}
         </>
       )}
-    </Container>
+    </S.Container>
   )
 }
