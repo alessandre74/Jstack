@@ -15,7 +15,7 @@ export const Select = styled.select`
     appearance: none;
 
     &:focus {
-      // border-color no focus mais o border acima faz com que o input não pule, somente a a cor da borda seja alterada.
+      // border-color no focus mais o border acima faz com que o input não pule, somente a cor da borda seja alterada.
       border-color: ${theme.colors.primary.main};
     }
 

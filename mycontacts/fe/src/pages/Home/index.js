@@ -1,10 +1,12 @@
 /* eslint-disable no-nested-ternary */
 import { Link } from 'react-router-dom'
+
 import { useHome } from './useHome'
 import { formatPhone } from '../../utils'
 import { Loader } from '../../components/Loader'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
+
 import arrow from '../../assets/images/arrow.svg'
 import edit from '../../assets/images/edit.svg'
 import trash from '../../assets/images/trash.svg'
@@ -12,103 +14,124 @@ import sad from '../../assets/images/sad.svg'
 import emptyBox from '../../assets/images/empty-box.svg'
 import magnifierQuestion from '../../assets/images/magnifier-question.svg'
 
-import * as S from './styles'
+import {
+  Container,
+  InputSearchContainer,
+  Header,
+  ErrorContainer,
+  EmptyListContainer,
+  SearchNotFoundContainer,
+  ListHeader,
+  Card
+} from './styles'
 
 export function Home() {
-  const hook = useHome()
+  const {
+    isLoading,
+    isLoadingDelete,
+    isDeleteModalVisible,
+    contactBeingDelete,
+    handleCloseDeleteModal,
+    handelConfirmDeleteContact,
+    contacts,
+    searchTerm,
+    handleChangeSearchTerm,
+    hasError,
+    filteredContacts,
+    handleTryAgain,
+    orderBy,
+    handleToggleOrderBy,
+    handleDeleteContact
+  } = useHome()
 
   return (
-    <S.Container>
-      <Loader isLoading={hook.isLoading} />
+    <Container>
+      <Loader isLoading={isLoading} />
       <Modal
         danger
-        isLoading={hook.isLoadingDelete}
-        visible={hook.isDeleteModalVisible}
-        title={`Tem certe za que deseja remover o contato "${hook.contactBeingDelete?.name}"`}
+        isLoading={isLoadingDelete}
+        visible={isDeleteModalVisible}
+        title={`Tem certe za que deseja remover o contato "${contactBeingDelete?.name}"`}
         confirmLabel="Deletar"
-        onCancel={hook.handleCloseDeleteModal}
-        onConfirm={hook.handelConfirmDeleteContact}
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handelConfirmDeleteContact}
       >
         <p>Esta ação não poderá ser desfeita!</p>
       </Modal>
 
-      {hook.contacts.length > 0 && (
-        <S.InputSearchContainer>
+      {contacts.length > 0 && (
+        <InputSearchContainer>
           <input
-            value={hook.searchTerm}
+            value={searchTerm}
             type="text"
             placeholder="Pesquisar pelo nome..."
-            onChange={hook.handleChangeSearchTerm}
+            onChange={handleChangeSearchTerm}
           />
-        </S.InputSearchContainer>
+        </InputSearchContainer>
       )}
 
-      <S.Header
+      <Header
         justifyContent={
-          hook.hasError
-            ? 'flex-end'
-            : hook.contacts.length > 0
-            ? 'space-between'
-            : 'center'
+          hasError ? 'flex-end' : contacts.length > 0 ? 'space-between' : 'center'
         }
       >
-        {!hook.hasError && hook.contacts.length > 0 && (
+        {!hasError && contacts.length > 0 && (
           <strong>
-            {hook.filteredContacts.length}
-            {hook.filteredContacts.length === 1 ? ' contato' : ' contatos'}
+            {filteredContacts.length}
+            {filteredContacts.length === 1 ? ' contato' : ' contatos'}
           </strong>
         )}
         <Link to="/new">Novo contato</Link>
-      </S.Header>
+      </Header>
 
-      {hook.hasError && (
-        <S.ErrorContainer>
+      {hasError && (
+        <ErrorContainer>
           <img src={sad} alt="Sad" />
 
           <div className="details">
             <strong>Ocorreu um erro ao obter os seus contatos!</strong>
 
-            <Button type="button" onClick={hook.handleTryAgain}>
+            <Button type="button" onClick={handleTryAgain}>
               Tentar novamente
             </Button>
           </div>
-        </S.ErrorContainer>
+        </ErrorContainer>
       )}
 
-      {!hook.hasError && (
+      {!hasError && (
         <>
-          {hook.contacts.length < 1 && !hook.isLoading && (
-            <S.EmptyListContainer>
+          {contacts.length < 1 && !isLoading && (
+            <EmptyListContainer>
               <img src={emptyBox} alt="Empty Box" />
 
               <p>
                 Você ainda não tem nenhum contato cadastrado! Clique no botão
                 <strong> ”Novo contato” </strong> à cima para cadastrar o seu primeiro!
               </p>
-            </S.EmptyListContainer>
+            </EmptyListContainer>
           )}
 
-          {hook.contacts.length > 0 && hook.filteredContacts.length < 1 && (
-            <S.SearchNotFoundContainer>
+          {contacts.length > 0 && filteredContacts.length < 1 && (
+            <SearchNotFoundContainer>
               <img src={magnifierQuestion} alt="Magnifier question" />
               <span>
                 Nenhum resultado foi encontrado para
-                <strong> {hook.searchTerm}.</strong>
+                <strong> {searchTerm}.</strong>
               </span>
-            </S.SearchNotFoundContainer>
+            </SearchNotFoundContainer>
           )}
 
-          {hook.filteredContacts.length > 0 && (
-            <S.ListHeader orderBy={hook.orderBy}>
-              <button type="button" onClick={hook.handleToggleOrderBy}>
+          {filteredContacts.length > 0 && (
+            <ListHeader orderBy={orderBy}>
+              <button type="button" onClick={handleToggleOrderBy}>
                 <span>Nome</span>
                 <img src={arrow} alt="Arrow" />
               </button>
-            </S.ListHeader>
+            </ListHeader>
           )}
 
-          {hook.filteredContacts.map((contact) => (
-            <S.Card key={contact.id}>
+          {filteredContacts.map((contact) => (
+            <Card key={contact.id}>
               <div className="info">
                 <div className="contact-name">
                   <strong>{contact.name}</strong>
@@ -123,14 +146,14 @@ export function Home() {
                   <img src={edit} alt="Edit" />
                 </Link>
 
-                <button type="button" onClick={() => hook.handleDeleteContact(contact)}>
+                <button type="button" onClick={() => handleDeleteContact(contact)}>
                   <img src={trash} alt="Delete" />
                 </button>
               </div>
-            </S.Card>
+            </Card>
           ))}
         </>
       )}
-    </S.Container>
+    </Container>
   )
 }
