@@ -5,7 +5,7 @@ import { Loader } from '../../components/Loader'
 import { ContactForm } from '../../components/ContactForm'
 import { PageHeader } from '../../components/PageHeader'
 
-import { toast, unFormatPhone } from '../../utils'
+import { toast } from '../../utils'
 import ContactsService from '../../services/ContactsService'
 import { useSafeAsyncAction } from '../../hooks/useSafeAsyncAction'
 
@@ -39,15 +39,8 @@ export function EditContact() {
     loadContact()
   }, [id, history, safeAsyncAction])
 
-  async function handleSubmit(formData) {
+  async function handleSubmit(contact) {
     try {
-      const contact = {
-        name: formData.name,
-        email: formData.email,
-        phone: unFormatPhone(formData.phone),
-        category_id: formData.categoryId
-      }
-
       const contactData = await ContactsService.updateContact(id, contact)
 
       setContactName(contactData.name)

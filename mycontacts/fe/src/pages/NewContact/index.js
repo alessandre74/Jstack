@@ -1,21 +1,14 @@
 import { useRef } from 'react'
 import { PageHeader } from '../../components/PageHeader'
 import { ContactForm } from '../../components/ContactForm'
-import { unFormatPhone, toast } from '../../utils'
+import { toast } from '../../utils'
 import ContactsService from '../../services/ContactsService'
 
 export function NewContact() {
   const contactFormRef = useRef(null)
 
-  async function handleSubmit(formData) {
+  async function handleSubmit(contact) {
     try {
-      const contact = {
-        name: formData.name,
-        email: formData.email,
-        phone: unFormatPhone(formData.phone),
-        category_id: formData.categoryId
-      }
-
       await ContactsService.createContact(contact)
 
       contactFormRef.current.resetFields()
