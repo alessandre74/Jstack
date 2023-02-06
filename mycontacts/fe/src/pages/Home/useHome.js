@@ -59,7 +59,7 @@ export function useHome() {
     setContactBeingDelete(null)
   }
 
-  async function handelConfirmDeleteContact() {
+  async function handleConfirmDeleteContact() {
     try {
       setIsLoadingDelete(true)
       await ContactsService.deleteContact(contactBeingDelete.id)
@@ -90,7 +90,7 @@ export function useHome() {
     isDeleteModalVisible,
     contactBeingDelete,
     handleCloseDeleteModal,
-    handelConfirmDeleteContact,
+    handleConfirmDeleteContact,
     contacts,
     searchTerm,
     handleChangeSearchTerm,
