@@ -23,12 +23,17 @@ export function TotastContainer() {
   }, [])
 
   const handleRemoveMessage = useCallback((id) => {
-    // setMessages((prevState) => prevState.filter((message) => message.id !== id))
-
     setPendingRemovalMessagesIds((prevState) => [...prevState, id])
   }, [])
 
-  console.log(messages, pendingRemovalMessagesIds)
+  const handleAnimationEnd = useCallback((id) => {
+    setMessages((prevState) => prevState.filter((message) => message.id !== id))
+    setPendingRemovalMessagesIds((prevState) =>
+      prevState.filter((messageId) => messageId !== id)
+    )
+  }, [])
+
+  console.log({ messages, pendingRemovalMessagesIds })
 
   return (
     <Container>
@@ -38,6 +43,7 @@ export function TotastContainer() {
           message={message}
           onRemoveMessage={handleRemoveMessage}
           isLeaving={pendingRemovalMessagesIds.includes(message.id)}
+          onAnimationEnd={handleAnimationEnd}
         />
       ))}
     </Container>
