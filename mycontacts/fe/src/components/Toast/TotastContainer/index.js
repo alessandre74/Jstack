@@ -5,6 +5,7 @@ import { Container } from './styles'
 
 export function TotastContainer() {
   const [messages, setMessages] = useState([])
+  const [pendingRemovalMessagesIds, setPendingRemovalMessagesIds] = useState([])
 
   useEffect(() => {
     function handleAddToast({ type, text, duration }) {
@@ -22,8 +23,12 @@ export function TotastContainer() {
   }, [])
 
   const handleRemoveMessage = useCallback((id) => {
-    setMessages((prevState) => prevState.filter((message) => message.id !== id))
+    // setMessages((prevState) => prevState.filter((message) => message.id !== id))
+
+    setPendingRemovalMessagesIds((prevState) => [...prevState, id])
   }, [])
+
+  console.log(messages, pendingRemovalMessagesIds)
 
   return (
     <Container>
@@ -32,6 +37,7 @@ export function TotastContainer() {
           key={message.id}
           message={message}
           onRemoveMessage={handleRemoveMessage}
+          isLeaving={pendingRemovalMessagesIds.includes(message.id)}
         />
       ))}
     </Container>

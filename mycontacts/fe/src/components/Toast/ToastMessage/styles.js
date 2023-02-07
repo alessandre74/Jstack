@@ -10,7 +10,17 @@ const messageIn = keyframes`
     opacity: 1;
     transform: translateY(0px)
   }
-  
+`
+const messageOut = keyframes`
+  from {
+    opacity: 1 ;
+    transform: translateY(0px);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(100px)
+  }
 `
 
 const containerVariants = {
@@ -26,7 +36,7 @@ const containerVariants = {
 }
 
 export const Container = styled.div`
-  ${({ theme, type }) => css`
+  ${({ theme, type, isLeaving }) => css`
     padding: 16px 32px;
     color: ${theme.colors.white};
     border-radius: 4px;
@@ -37,9 +47,10 @@ export const Container = styled.div`
     cursor: pointer;
     animation: ${messageIn} 0.3s;
 
-    &:focus {
-      background: purple;
-    }
+    ${isLeaving &&
+    css`
+      animation: ${messageOut} 0.2s;
+    `}
 
     ${containerVariants[type] || containerVariants.default}
 
