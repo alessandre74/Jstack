@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useAnimatedList } from '../../../hooks/useAnimatedList'
 import { toastEventManager } from '../../../utils/_toast'
-import { ToastMessage } from '../ToastMessage'
+import ToastMessage from '../ToastMessage'
 import { Container } from './styles'
 
 export function TotastContainer() {
