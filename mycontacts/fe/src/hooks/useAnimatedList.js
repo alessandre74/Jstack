@@ -7,25 +7,42 @@ export function useAnimatedList(initialValue = []) {
   const animatedRefs = useRef(new Map())
   const animationEndListeners = useRef(new Map())
 
-  const handleAnimationEnd = useCallback((id) => {
-    setItems((prevState) => prevState.filter((item) => item.id !== id))
-    setPendingRemovalItemsIds((prevState) => prevState.filter((itemId) => itemId !== id))
+  const handleAnimationEnd = useCallback((itemID) => {
+    const removeListener = animationEndListeners.current.get(itemID)
+    removeListener()
+
+    animationEndListeners.current.delete(itemID)
+    animatedRefs.current.delete(itemID)
+
+    setItems((prevState) => prevState.filter((item) => item.id !== itemID))
+    setPendingRemovalItemsIds((prevState) => prevState.filter((id) => id !== itemID))
   }, [])
 
   useEffect(() => {
     pendingRemovalItemsIds.forEach((itemId) => {
       const animatedRef = animatedRefs.current.get(itemId)
+      const animatedElement = animatedRef?.current
       const alreadyHasListener = animationEndListeners.current.has(itemId)
 
-      if (animatedRef?.current && !alreadyHasListener) {
-        animationEndListeners.current.set(itemId, true)
-        animatedRef.current.addEventListener('animationend', () => {
-          console.log('animationend executou')
-          handleAnimationEnd(itemId)
-        })
+      if (animatedElement && !alreadyHasListener) {
+        const onAnimationEnd = () => handleAnimationEnd(itemId)
+        const removeListener = () => {
+          animatedElement.removeEventListener('animationend', onAnimationEnd)
+        }
+
+        animatedElement.addEventListener('animationend', onAnimationEnd)
+        animationEndListeners.current.set(itemId, removeListener)
       }
     })
   }, [handleAnimationEnd, pendingRemovalItemsIds])
+
+  useEffect(() => {
+    const removeListeners = animationEndListeners.current
+
+    return () => {
+      removeListeners.forEach((removeListener) => removeListener())
+    }
+  }, [])
 
   const handleRemoveItem = useCallback((id) => {
     setPendingRemovalItemsIds((prevState) => [...prevState, id])
@@ -41,8 +58,6 @@ export function useAnimatedList(initialValue = []) {
 
     return animatedRef
   }, [])
-
-  console.log({ items, pendingRemovalItemsIds })
 
   const renderList = useCallback(
     (renderItem) =>
