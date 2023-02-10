@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useMemo, useCallback, useTransition } from 'react'
 import { toast } from '../../utils'
 import ContactsService from '../../services/ContactsService'
 
@@ -11,12 +11,14 @@ export function useHome() {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false)
   const [contactBeingDelete, setContactBeingDelete] = useState(null)
   const [isLoadingDelete, setIsLoadingDelete] = useState(false)
+  const [filteredContacts, setFilteredContacts] = useState([])
+  const [isPeding, startTransition] = useTransition()
 
-  const filteredContacts = useMemo(() => {
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  }, [contacts, searchTerm])
+  // const filteredContacts = useMemo(() => {
+  //   return contacts.filter((contact) =>
+  //     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+  //   )
+  // }, [contacts, searchTerm])
 
   const loadingContacts = useCallback(async () => {
     try {
@@ -26,6 +28,7 @@ export function useHome() {
 
       setHasError(false)
       setContacts(contactList)
+      setFilteredContacts(contactList)
     } catch (error) {
       setHasError(true)
       setContacts([])
@@ -38,22 +41,32 @@ export function useHome() {
     loadingContacts()
   }, [loadingContacts])
 
-  function handleToggleOrderBy() {
+  const handleToggleOrderBy = useCallback(() => {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'))
-  }
+  }, [])
 
   function handleChangeSearchTerm(event) {
-    setSearchTerm(event.target.value)
+    const { value } = event.target
+
+    setSearchTerm(value)
+
+    startTransition(() => {
+      setFilteredContacts(
+        contacts.filter((contact) =>
+          contact.name.toLowerCase().includes(value.toLowerCase())
+        )
+      )
+    })
   }
 
   function handleTryAgain() {
     loadingContacts()
   }
 
-  function handleDeleteContact(contact) {
+  const handleDeleteContact = useCallback((contact) => {
     setIsDeleteModalVisible(true)
     setContactBeingDelete(contact)
-  }
+  }, [])
 
   function handleCloseDeleteModal() {
     setIsDeleteModalVisible(false)
@@ -85,6 +98,7 @@ export function useHome() {
   }
 
   return {
+    isPeding,
     isLoading,
     isLoadingDelete,
     isDeleteModalVisible,

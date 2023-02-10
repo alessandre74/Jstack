@@ -4,14 +4,15 @@ import { Header } from './components/Header'
 import { EmptyList } from './components/EmptyList'
 import { InputSearch } from './components/InputSearch'
 import { ErrorStatus } from './components/ErrorStatus'
-import { ContactsList } from './components/ContactsList'
 import { SearchNotFound } from './components/SearchNotFound'
+import ContactsList from './components/ContactsList'
 
 import { Container } from './styles'
 import { Modal } from '../../components/Modal'
 
 export function Home() {
   const {
+    isPeding,
     isLoading,
     isLoadingDelete,
     isDeleteModalVisible,
@@ -55,6 +56,7 @@ export function Home() {
 
       {hasContacts && (
         <>
+          {isPeding && <h1>Carregando...</h1>}
           <ContactsList
             filteredContacts={filteredContacts}
             orderBy={orderBy}
