@@ -35,7 +35,7 @@ export const Overlay = styled.div`
 
     ${isLeaving &&
     css`
-      animation: ${fadeOut} 0.2s;
+      animation: ${fadeOut} 0.2s forwards;
     `}
   `}
 `
@@ -52,7 +52,7 @@ export const Container = styled.div`
 
     ${isLeaving &&
     css`
-      animation: ${scaleOut} 0.2s;
+      animation: ${scaleOut} 0.2s forwards;
     `}
 
     > h1 {

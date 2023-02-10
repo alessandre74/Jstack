@@ -1,24 +1,24 @@
-import { useEffect, useState, useMemo, useCallback, useTransition } from 'react'
+import { useEffect, useState, useMemo, useCallback, useDeferredValue } from 'react'
 import { toast } from '../../utils'
 import ContactsService from '../../services/ContactsService'
 
 export function useHome() {
   const [contacts, setContacts] = useState([])
   const [orderBy, setOrderBy] = useState('asc')
-  const [searchTerm, setSearchTerm] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false)
   const [contactBeingDelete, setContactBeingDelete] = useState(null)
   const [isLoadingDelete, setIsLoadingDelete] = useState(false)
-  const [filteredContacts, setFilteredContacts] = useState([])
-  const [isPeding, startTransition] = useTransition()
+  const [searchTerm, setSearchTerm] = useState('')
 
-  // const filteredContacts = useMemo(() => {
-  //   return contacts.filter((contact) =>
-  //     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  //   )
-  // }, [contacts, searchTerm])
+  const deferredSearchTerm = useDeferredValue(searchTerm)
+
+  const filteredContacts = useMemo(() => {
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(deferredSearchTerm.toLowerCase())
+    )
+  }, [contacts, deferredSearchTerm])
 
   const loadingContacts = useCallback(async () => {
     try {
@@ -28,7 +28,6 @@ export function useHome() {
 
       setHasError(false)
       setContacts(contactList)
-      setFilteredContacts(contactList)
     } catch (error) {
       setHasError(true)
       setContacts([])
@@ -46,17 +45,7 @@ export function useHome() {
   }, [])
 
   function handleChangeSearchTerm(event) {
-    const { value } = event.target
-
-    setSearchTerm(value)
-
-    startTransition(() => {
-      setFilteredContacts(
-        contacts.filter((contact) =>
-          contact.name.toLowerCase().includes(value.toLowerCase())
-        )
-      )
-    })
+    setSearchTerm(event.target.value)
   }
 
   function handleTryAgain() {
@@ -98,7 +87,6 @@ export function useHome() {
   }
 
   return {
-    isPeding,
     isLoading,
     isLoadingDelete,
     isDeleteModalVisible,

@@ -12,7 +12,6 @@ import { Modal } from '../../components/Modal'
 
 export function Home() {
   const {
-    isPeding,
     isLoading,
     isLoadingDelete,
     isDeleteModalVisible,
@@ -56,7 +55,6 @@ export function Home() {
 
       {hasContacts && (
         <>
-          {isPeding && <h1>Carregando...</h1>}
           <ContactsList
             filteredContacts={filteredContacts}
             orderBy={orderBy}
