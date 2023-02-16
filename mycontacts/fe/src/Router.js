@@ -1,15 +1,23 @@
-import { Route, Routes } from 'react-router-dom'
+import { useRoutes } from 'react-router-dom'
 
 import { Home } from './pages/Home'
 import { EditContact } from './pages/EditContact'
 import { NewContact } from './pages/NewContact'
 
 export function Router() {
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/new" element={<NewContact />} />
-      <Route path="/edit/:id" element={<EditContact />} />
-    </Routes>
-  )
+  const routes = useRoutes([
+    {
+      path: '/',
+      element: <Home />
+    },
+    {
+      path: '/new',
+      element: <NewContact />
+    },
+    {
+      path: '/edit/:id',
+      element: <EditContact />
+    }
+  ])
+  return routes
 }
