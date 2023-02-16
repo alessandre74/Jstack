@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { Header } from '../Header'
-import { Routes } from '../../Routes'
+import { Router } from '../../Router'
 import { GlobalStyles } from '../../assets/styles/global'
 import { defaultTheme } from '../../assets/styles/default'
 import { Container } from './styles'
@@ -15,7 +15,7 @@ export function App() {
         <TotastContainer />
         <Container>
           <Header />
-          <Routes />
+          <Router />
         </Container>
       </ThemeProvider>
     </BrowserRouter>
