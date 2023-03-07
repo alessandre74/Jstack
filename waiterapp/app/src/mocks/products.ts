@@ -1,4 +1,4 @@
-const products = [
+export const products = [
   {
     _id: '6372e040f52e37ef85fe2c5e',
     name: 'Pizza quatro queijos',
@@ -26,7 +26,7 @@ const products = [
         icon: '🧀',
         _id: '6372e040f52e37ef85fe2c62'
       }
-    ],
+    ]
   },
   {
     _id: '6372e276a381106c0f854cb3',
@@ -34,6 +34,6 @@ const products = [
     description: 'Coca cola lata geladinha topzera',
     imagePath: '1668473462705-coca-cola.png',
     price: 7,
-    ingredients: [],
-  },
-];
+    ingredients: []
+  }
+]

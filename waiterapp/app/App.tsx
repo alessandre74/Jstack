@@ -1,3 +1,7 @@
+//intl instaldo pois o android não tem suporte a funcção intl do javascript
+import 'intl'
+import 'intl/locale-data/jsonp/pt-BR'
+
 import { useFonts } from 'expo-font'
 import { Main } from './src/Main'
 
