@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Modal, TouchableOpacity, Platform } from 'react-native'
 import { Button } from '../Button'
 import { Close } from '../Icons/Close'
-
 import { Text } from '../Text'
 import { Form, Header, Input, ModalBody, Overlay } from './styles'
 
@@ -15,13 +14,14 @@ interface TableModalProps {
 export function TableModal({ visible, onClose, onSave }: TableModalProps) {
   const [table, setTable] = useState('')
 
-  useEffect(() => {
-    return () => {
-      setTable('')
-    }
-  }, [onClose])
+  // useEffect(() => {
+  //   return () => {
+  //     setTable('')
+  //   }
+  // }, [onClose])
 
   function handleSave() {
+    setTable('')
     onSave(table)
     onClose()
   }
