@@ -1,4 +1,4 @@
-//intl instaldo pois o android não tem suporte a funcção intl do javascript
+//intl instalado pois o android não tem suporte a função intl do javascript
 import 'intl'
 import 'intl/locale-data/jsonp/pt-BR'
 
