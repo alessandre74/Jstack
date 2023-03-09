@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
-import { Button } from '../Button'
 import { Text } from '../Text'
+import { Button } from '../Button'
+import { OrderConfirmedModal } from '../OrderConfirmedModal'
 import { Product } from '../../types/Product'
 import { CartItem } from '../../types/CartItem'
 import { PlusCircle } from '../Icons/PlusCircle'
 import { MinusCircle } from '../Icons/MinusCircle'
+import { api } from '../../Utils/api'
 import { formatCurrency } from '../../Utils/formarCurrency'
 import {
   Item,
@@ -16,25 +19,39 @@ import {
   Summary,
   TotalContainer
 } from './styles'
-import { OrderConfirmedModal } from '../OrderConfirmedModal'
-import { useState } from 'react'
 
 interface CartProps {
   cartItems: CartItem[]
   onAdd: (product: Product) => void
   onDecrement: (product: Product) => void
   onConfirmOrder: () => void
+  selectedTable: string
 }
 
-export function Cart({ cartItems, onAdd, onDecrement, onConfirmOrder }: CartProps) {
-  const [isLoading] = useState(false)
+export function Cart({
+  cartItems,
+  onAdd,
+  onDecrement,
+  onConfirmOrder,
+  selectedTable
+}: CartProps) {
+  const [isLoading, setIsLoading] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const total = cartItems.reduce((acc, carItem) => {
     return acc + carItem.quantity * carItem.product.price
   }, 0)
 
-  function handleConfirmOrder() {
+  async function handleConfirmOrder() {
+    setIsLoading(true)
+    await api.post('/orders', {
+      table: selectedTable,
+      products: cartItems.map((cartItem) => ({
+        product: cartItem.product._id,
+        quantity: cartItem.quantity
+      }))
+    })
+    setIsLoading(false)
     setIsModalVisible(true)
   }
 
