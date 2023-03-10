@@ -1,17 +1,28 @@
 import { useState } from 'react'
-import { Order } from '../../types/Order'
+import { toast } from 'react-toastify'
 import { OrderModal } from '../OrderModal'
+import { api } from '../../Utils/api'
+import { Order } from '../../types/Order'
 import { Board, OrdersContainer } from './styles'
 
 interface OrdersBoardProps {
   icon: string
   title: string
   orders: Order[]
+  onCancelOrder: (orderId: string) => void
+  onChangeOrderStatus: (orderId: string, status: Order['status']) => void
 }
 
-export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
+export function OrdersBoard({
+  icon,
+  title,
+  orders,
+  onCancelOrder,
+  onChangeOrderStatus
+}: OrdersBoardProps) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [selectdOrder, setSelectedOrder] = useState<null | Order>(null)
+  const [isLoading, setIsloading] = useState(false)
 
   function handleOpenModal(order: Order) {
     setIsModalVisible(true)
@@ -23,12 +34,41 @@ export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
     setSelectedOrder(null)
   }
 
+  async function handleChangeOrderStatus() {
+    setIsloading(true)
+
+    const status = selectdOrder?.status === 'WAITING' ? 'IN_PRODUCTION' : 'DONE'
+
+    await api.patch(`/orders/${selectdOrder?._id}`, { status })
+
+    toast.success(`O pedido da mesa ${selectdOrder?.table} teve o status alterado!`)
+
+    onChangeOrderStatus(selectdOrder!._id, status)
+    setIsloading(false)
+    setIsModalVisible(false)
+  }
+
+  async function handleCancelOrder() {
+    setIsloading(true)
+
+    await api.delete(`/orders/${selectdOrder?._id}`)
+
+    toast.success(`O pedido da mesa ${selectdOrder?.table} foi cancelado!`)
+
+    onCancelOrder(selectdOrder!._id)
+    setIsloading(false)
+    setIsModalVisible(false)
+  }
+
   return (
     <Board>
       <OrderModal
         visible={isModalVisible}
         order={selectdOrder}
         onClose={handleCloseModal}
+        onCancelOrder={handleCancelOrder}
+        isLoading={isLoading}
+        onChangeOrderStatus={handleChangeOrderStatus}
       />
       <header>
         <span>{icon}</span>
