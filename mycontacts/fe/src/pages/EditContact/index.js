@@ -1,5 +1,5 @@
-import { Loader } from '../../components/Loader'
 import { ContactForm } from '../../components/ContactForm'
+import { Loader } from '../../components/Loader'
 import { PageHeader } from '../../components/PageHeader'
 
 import { useEditContact } from './useEditContact'
