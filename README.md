@@ -1,5 +1,5 @@
 <div align="center">
-       <img src="./images/jstack.png"/>
+       <img src="./projects/images/jstack.png"/>
 </div>
 
 </br>
