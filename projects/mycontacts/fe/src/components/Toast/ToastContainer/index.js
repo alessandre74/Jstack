@@ -4,15 +4,12 @@ import { toastEventManager } from '../../../utils/_toast'
 import ToastMessage from '../ToastMessage'
 import { Container } from './styles'
 
-export function TotastContainer() {
+export function ToastContainer() {
   const { setItems: setMessages, handleRemoveItem, renderList } = useAnimatedList()
 
   useEffect(() => {
     function handleAddToast({ type, text, duration }) {
-      setMessages((prevState) => [
-        ...prevState,
-        { id: Math.random(), type, text, duration }
-      ])
+      setMessages(prevState => [...prevState, { id: Math.random(), type, text, duration }])
     }
 
     toastEventManager.on('addtoast', handleAddToast)

@@ -16,7 +16,7 @@ export class EventManager {
       return
     }
 
-    this.listeners.get(event).forEach((listener) => {
+    this.listeners.get(event).forEach(listener => {
       listener(payload)
     })
   }
@@ -27,9 +27,7 @@ export class EventManager {
       return
     }
 
-    const filteredListeners = listeners.filter(
-      (listener) => listener !== listenerToRemove
-    )
+    const filteredListeners = listeners.filter(listener => listener !== listenerToRemove)
 
     this.listeners.set(event, filteredListeners)
   }

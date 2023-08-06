@@ -5,14 +5,14 @@ import { Router } from '../../Router'
 import { GlobalStyles } from '../../assets/styles/global'
 import { defaultTheme } from '../../assets/styles/default'
 import { Container } from './styles'
-import { TotastContainer } from '../Toast/TotastContainer'
+import { ToastContainer } from '../Toast/ToastContainer'
 
 export function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles />
-        <TotastContainer />
+        <ToastContainer />
         <Container>
           <Header />
           <Router />
