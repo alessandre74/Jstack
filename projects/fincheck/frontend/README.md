@@ -4,7 +4,7 @@
 
 ## 💻 Projeto
 
-Finchek - É um app de controle de finanças pessoais, desenvolvido no curso JStack.
+Finchek - É um app de controle de finanças pessoais, desenvolvido no curso [JStack](https://jstack.com.br/).
 
 ## 🚀 Tecnologias utilizadas
 
