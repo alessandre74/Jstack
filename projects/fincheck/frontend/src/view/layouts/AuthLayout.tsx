@@ -17,7 +17,6 @@ export function AuthLayout() {
       </div>
 
       <div className="w-1/2 h-full justify-center items-center p-8 relative hidden lg:flex lg:transition-all">
-        {/* <div> */}
         <img
           src={illustration}
           className="object-cover w-full h-full max-w-[656px] max-h-[960px] select-none rounded-[32px]"
@@ -30,7 +29,6 @@ export function AuthLayout() {
             totalmente de graça!
           </p>
         </div>
-        {/* </div> */}
       </div>
     </div>
   )
