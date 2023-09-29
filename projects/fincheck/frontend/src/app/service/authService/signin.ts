@@ -1,4 +1,3 @@
-import { sleep } from '../../utils/sleep'
 import { httpClient } from '../httpClient'
 
 export type SigninParams = {
@@ -9,7 +8,6 @@ export type SigninParams = {
 type SigninResponse = { accessToken: string }
 
 export async function signin(params: SigninParams) {
-  await sleep(1500)
   const { data } = await httpClient.post<SigninResponse>('/auth/signin', params)
 
   return data
