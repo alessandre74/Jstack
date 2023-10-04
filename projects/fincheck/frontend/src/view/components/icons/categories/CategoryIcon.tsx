@@ -1,7 +1,7 @@
 import { iconsMap } from './iconsMap'
 
 interface CategoryIconProps {
-  type: keyof typeof iconsMap //'income' | 'expense'
+  type: keyof typeof iconsMap
   category?: string
 }
 
