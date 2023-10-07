@@ -1,9 +1,9 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { AccountCard } from './AccountCard'
+import { SliderNavigation } from './SliderNavigation'
 import { useAccountController } from './useAccountController'
 import { EyeIcon } from '../../../../components/icons/EyeIcon'
-import { AccountSliderNavigation } from './AccountSliderNavigation'
 
 import 'swiper/css'
 
@@ -41,10 +41,7 @@ export function Accounts() {
                 Minhas contas
               </strong>
 
-              <AccountSliderNavigation
-                isBeginning={sliderState.isBeginning}
-                isEnd={sliderState.isEnd}
-              />
+              <SliderNavigation isBeginning={sliderState.isBeginning} isEnd={sliderState.isEnd} />
             </div>
 
             <SwiperSlide>
