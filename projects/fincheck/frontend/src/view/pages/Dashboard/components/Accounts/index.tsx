@@ -1,14 +1,14 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { AccountCard } from './AccountCard'
 import { cn } from '../../../../../app/utils/cn'
+import { formatCurrency } from '../../../../../app/utils/formatCurrency'
+import { EyeIcon } from '../../../../components/icons/EyeIcon'
+import { AccountCard } from './AccountCard'
 import { SliderNavigation } from './SliderNavigation'
 import { useAccountController } from './useAccountController'
-import { EyeIcon } from '../../../../components/icons/EyeIcon'
-import { formatCurrency } from '../../../../../app/utils/formatCurrency'
 
+import { PlusIcon } from '@radix-ui/react-icons'
 import 'swiper/css'
 import { Spinner } from '../../../../components/Spinner'
-import { PlusIcon } from '@radix-ui/react-icons'
 
 export function Accounts() {
   const {
@@ -18,7 +18,8 @@ export function Accounts() {
     areValuesVisible,
     toggleValuesVisibility,
     isLoading,
-    accounts
+    accounts,
+    openNewAccountModal
   } = useAccountController()
 
   return (
@@ -62,7 +63,11 @@ export function Accounts() {
                   </strong>
                 </div>
 
-                <button className="mt-4 h-52 rounded-2xl border-2 border-dashed border-teal-600 flex flex-col items-center justify-center gap-4 text-white">
+                <button
+                  className="mt-4 h-52 rounded-2xl border-2 border-dashed border-teal-600 flex flex-col items-center justify-center gap-4 text-white
+                 hover:bg-teal-950/5 transition-colors"
+                  onClick={openNewAccountModal}
+                >
                   <div className="w-11 h-11 rounded-full border-2 border-dashed border-white flex items-center justify-center">
                     <PlusIcon className="w-6 h-6" />
                   </div>
