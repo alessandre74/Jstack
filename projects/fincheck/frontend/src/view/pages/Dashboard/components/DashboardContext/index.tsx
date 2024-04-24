@@ -4,6 +4,7 @@ type DashboardContextValue = {
   areValuesVisible: boolean
   isNewAccountModalOpen: boolean
   isNewTransactionModalOpen: boolean
+  newTransactionType: 'INCOME' | 'EXPENSE' | null
   toggleValuesVisibility(): void
   openNewAccountModal(): void
   closeNewAccountModal(): void
@@ -15,8 +16,9 @@ export const DashboardContext = createContext({} as DashboardContextValue)
 
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [areValuesVisible, setAreValuesVisible] = useState(true)
-  const [isNewAccountModalOpen, setIsNewAccountModalOpen] = useState(true)
-  const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(true)
+  const [isNewAccountModalOpen, setIsNewAccountModalOpen] = useState(false)
+  const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false)
+  const [newTransactionType, setNewTransactionType] = useState<'INCOME' | 'EXPENSE' | null>(null)
 
   const toggleValuesVisibility = useCallback(() => {
     setAreValuesVisible((prevState) => !prevState)
@@ -29,10 +31,12 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     setIsNewAccountModalOpen(false)
   }, [])
 
-  const openNewTransactionModal = useCallback(() => {
+  const openNewTransactionModal = useCallback((type: 'INCOME' | 'EXPENSE') => {
+    setNewTransactionType(type)
     setIsNewTransactionModalOpen(true)
   }, [])
   const closeNewTransactionModal = useCallback(() => {
+    setNewTransactionType(null)
     setIsNewTransactionModalOpen(false)
   }, [])
 
@@ -40,11 +44,12 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     <DashboardContext.Provider
       value={{
         areValuesVisible,
-        toggleValuesVisibility,
+        newTransactionType,
         isNewAccountModalOpen,
+        isNewTransactionModalOpen,
+        toggleValuesVisibility,
         openNewAccountModal,
         closeNewAccountModal,
-        isNewTransactionModalOpen,
         openNewTransactionModal,
         closeNewTransactionModal
       }}
