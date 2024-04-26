@@ -1,7 +1,7 @@
-import * as RdxSelect from '@radix-ui/react-select'
-import { cn } from '../../app/utils/cn'
 import { ChevronDownIcon, ChevronUpIcon, CrossCircledIcon } from '@radix-ui/react-icons'
+import * as RdxSelect from '@radix-ui/react-select'
 import { useState } from 'react'
+import { cn } from '../../app/utils/cn'
 
 interface SelectProps {
   className?: string
@@ -11,13 +11,16 @@ interface SelectProps {
     value: string
     label: string
   }[]
+  value?: string
+  onChange?(value: string): void
 }
 
-export function Select({ className, error, placeholder, options }: SelectProps) {
-  const [selectedValue, setSelectedValue] = useState('')
+export function Select({ className, error, placeholder, options, value, onChange }: SelectProps) {
+  const [selectedValue, setSelectedValue] = useState(value ?? '')
 
   function handleSelect(value: string) {
     setSelectedValue(value)
+    onChange?.(value)
   }
 
   return (
@@ -26,18 +29,18 @@ export function Select({ className, error, placeholder, options }: SelectProps) 
         <label
           className={cn(
             'absolute z-10 top-1/2 -translate-y-1/2 left-3 text-gray-700 pointer-events-none',
-            selectedValue && 'text-xs left-[13px] top-2 transition-all translate-y-0'
+            selectedValue && 'text-xs left-[13px] top-2 transition-all translate-y-0',
           )}
         >
           {placeholder}
         </label>
 
-        <RdxSelect.Root onValueChange={handleSelect}>
+        <RdxSelect.Root value={value} onValueChange={handleSelect}>
           <RdxSelect.Trigger
             className={cn(
               'bg-white w-full rounded-lg border border-gray-500 px-3 h-[52px] text-gray-800 focus:border-gray-800 transition-all outline-none text-left relative pt-4',
               error && '!border-red-900',
-              className
+              className,
             )}
           >
             <RdxSelect.Value />

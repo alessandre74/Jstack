@@ -1,12 +1,14 @@
 import { ChevronDownIcon, CrossCircledIcon } from '@radix-ui/react-icons'
+import { useState } from 'react'
 import { cn } from '../../app/utils/cn'
 import { DropdownMenu } from './DropdownMenu'
 import { ColorIcon } from './icons/ColorIcon'
-import { useState } from 'react'
 
 interface ColorsDropdownInputProps {
   error?: string
   className?: string
+  value?: string
+  onChange?(value: string): void
 }
 
 type Color = {
@@ -28,14 +30,24 @@ const colors: Color[] = [
   { color: '#82C91E', bg: '#F4FCE3' },
   { color: '#FAB005', bg: '#FFF9DB' },
   { color: '#FD7E14', bg: '#FFF4E6' },
-  { color: '#212529', bg: '#F8F9FA' }
+  { color: '#212529', bg: '#F8F9FA' },
 ]
 
-export function ColorsDropdownInput({ error, className }: ColorsDropdownInputProps) {
-  const [selectedColor, setSelectedColor] = useState<null | Color>(null)
+export function ColorsDropdownInput({
+  error,
+  className,
+  value,
+  onChange,
+}: ColorsDropdownInputProps) {
+  const [selectedColor, setSelectedColor] = useState<null | Color>(() => {
+    if (!value) return null
+
+    return colors.find((c) => c.color === value) ?? null
+  })
 
   function handleSelect(color: Color) {
     setSelectedColor(color)
+    onChange?.(color.color)
   }
 
   return (
@@ -46,7 +58,7 @@ export function ColorsDropdownInput({ error, className }: ColorsDropdownInputPro
             className={cn(
               'bg-white w-full rounded-lg border border-gray-500 px-3 h-[52px] text-gray-700 focus:border-gray-800 transition-all outline-none text-left relative',
               error && '!border-red-900',
-              className
+              className,
             )}
           >
             Cor
