@@ -6,12 +6,6 @@ import { useDashboard } from '../DashboardContext/useDashboard'
 
 type AccountCardProps = {
   data: BankAccount
-
-  // id: string
-  // color: string
-  // name: string
-  // balance: number
-  // type: keyof typeof iconsMap
 }
 
 export function AccountCard({ data }: AccountCardProps) {
