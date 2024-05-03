@@ -2,16 +2,23 @@ import { CrossCircledIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 import { cn } from '../../app/utils/cn'
 import { formatDate } from '../../app/utils/formatDate'
-import { Popover } from './Popover'
 import { DatePicker } from './DatePicker'
+import { Popover } from './Popover'
 
 interface DatePickerInputProps {
   error?: string
   className?: string
+  value?: Date
+  onChange?(date: Date): void
 }
 
-export function DatePickerInput({ error, className }: DatePickerInputProps) {
-  const [selectedDate, setSelectedDate] = useState(new Date())
+export function DatePickerInput({ error, className, value, onChange }: DatePickerInputProps) {
+  const [selectedDate, setSelectedDate] = useState(value ?? new Date())
+
+  function handleChangeDate(date: Date) {
+    setSelectedDate(date)
+    onChange?.(date)
+  }
 
   return (
     <div>
@@ -22,7 +29,7 @@ export function DatePickerInput({ error, className }: DatePickerInputProps) {
             className={cn(
               'bg-white w-full rounded-lg border border-gray-500 px-3 h-[52px] text-gray-700 focus:border-gray-800 transition-all outline-none text-left relative pt-4',
               error && '!border-red-900',
-              className
+              className,
             )}
           >
             <span className="absolute text-gray-700 text-xs left-[13px] top-2 pointer-events-auto">
@@ -32,7 +39,7 @@ export function DatePickerInput({ error, className }: DatePickerInputProps) {
           </button>
         </Popover.Trigger>
         <Popover.Content>
-          <DatePicker value={selectedDate} onChange={(date) => setSelectedDate(date)} />
+          <DatePicker value={selectedDate} onChange={handleChangeDate} />
         </Popover.Content>
       </Popover.Root>
 

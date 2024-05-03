@@ -4,7 +4,7 @@ import { Spinner } from './Spinner'
 
 type ButtonProps = ComponentProps<'button'> & {
   isLoading?: boolean
-  danger?: boolean
+  variant?: 'danger' | 'ghost'
 }
 
 export function Button({
@@ -12,7 +12,7 @@ export function Button({
   isLoading,
   disabled,
   children,
-  danger,
+  variant,
   ...props
 }: ButtonProps) {
   return (
@@ -21,7 +21,9 @@ export function Button({
       disabled={disabled || isLoading}
       className={cn(
         'bg-teal-900 hover:bg-teal-800 disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-400 px-6 h-12 rounded-2xl  font-medium text-white transition-all flex justify-center items-center',
-        danger && 'bg-red-900 hover:bg-red-800',
+        variant === 'danger' && 'bg-red-900 hover:bg-red-800',
+        variant === 'ghost' &&
+          'bg-transparent border border-gray-800 text-gray-800 hover:bg-gray-800/5',
         className,
       )}
     >

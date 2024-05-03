@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
-import { BankAccountsService } from '../../../../../app/service/bankAccountsService'
+import { BankAccountsService } from '../../../../../app/services/bankAccountsService'
 import { currencyStringToNumber } from '../../../../../app/utils/currencyStringToNumber'
 import { useDashboard } from '../../components/DashboardContext/useDashboard'
 
@@ -38,7 +38,12 @@ export function useNewAccountModalController() {
 
       queryClient.invalidateQueries({ queryKey: ['bankAccounts'] })
       toast.success('Conta foi cadastrada com sucesso!')
-      reset({ initialBalance: '0', name: '', type: 'CHECKING', color: '' })
+      reset({
+        initialBalance: '0',
+        name: '',
+        type: 'CHECKING',
+        color: '',
+      })
       closeNewAccountModal()
     } catch (error) {
       toast.error('Erro ao cadastrar a conta!')

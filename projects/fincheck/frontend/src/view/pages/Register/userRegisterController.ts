@@ -1,11 +1,11 @@
-import { z } from 'zod'
-import toast from 'react-hot-toast'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { authService } from '../../../app/service/authService'
-import { SignupParams } from '../../../app/service/authService/signup'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { z } from 'zod'
 import { useAuth } from '../../../app/hooks/useAuth'
+import { authService } from '../../../app/services/authService'
+import { SignupParams } from '../../../app/services/authService/signup'
 
 const schema = z.object({
   name: z.string().nonempty('Nome é obrigatório.'),
@@ -13,7 +13,7 @@ const schema = z.object({
   password: z
     .string()
     .nonempty('Senha é obrigatória.')
-    .min(8, 'Senha deve conter pelo menos 8 digitos')
+    .min(8, 'Senha deve conter pelo menos 8 digitos'),
 })
 
 type FormData = z.infer<typeof schema>
@@ -22,15 +22,15 @@ export function useRegisterController() {
   const {
     handleSubmit: hookFormSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
   })
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: async (data: SignupParams) => {
       return authService.signup(data)
-    }
+    },
   })
 
   const { signin } = useAuth()

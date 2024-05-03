@@ -1,9 +1,9 @@
-import { createContext, useCallback, useEffect, useState } from 'react'
-import { localStorageKeys } from '../config/localStorageKeys'
 import { useQuery } from '@tanstack/react-query'
-import { usersService } from '../service/usersService'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { LaunchScreen } from '../../view/components/LaunchScreen'
+import { localStorageKeys } from '../config/localStorageKeys'
+import { usersService } from '../services/usersService'
 
 type AuthContextValue = {
   signedIn: boolean
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     queryKey: ['users', 'me'],
     queryFn: async () => usersService.me(),
     enabled: signedIn,
-    staleTime: Infinity
+    staleTime: Infinity,
   })
 
   const signin = useCallback((accessToken: string) => {
