@@ -2,18 +2,19 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import emptyStateImage from '../../../../../assets/empty-state.svg'
 
-import { SliderOption } from './SliderOption'
 import { SliderNavigation } from './SliderNavigation'
+import { SliderOption } from './SliderOption'
 import { TransactionTypeDropdown } from './TransactionTypeDropdown'
 import { useTransactionsController } from './useTransactionsController'
 
-import { cn } from '../../../../../app/utils/cn'
 import { MONTHS } from '../../../../../app/config/constants'
+import { cn } from '../../../../../app/utils/cn'
 import { formatCurrency } from '../../../../../app/utils/formatCurrency'
 
 import { Spinner } from '../../../../components/Spinner'
 import { FilterIcon } from '../../../../components/icons/FilterIcon'
 
+import { formatDate } from '../../../../../app/utils/formatDate'
 import { CategoryIcon } from '../../../../components/icons/categories/CategoryIcon'
 import { FiltersModal } from './FiltersModal'
 
@@ -25,7 +26,7 @@ export function Transactions() {
     transactions,
     isFiltersModalOpen,
     handleOpenFiltersModal,
-    handleCloseFiltersModal
+    handleCloseFiltersModal,
   } = useTransactionsController()
 
   const hasTransactions = transactions.length > 0
@@ -79,49 +80,41 @@ export function Transactions() {
               </div>
             )}
 
-            {hasTransactions && !isLoading && (
-              <>
-                <div className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4">
+            {hasTransactions &&
+              !isLoading &&
+              transactions.map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4"
+                >
                   <div className="flex flex-1 items-center gap-3">
-                    <CategoryIcon type="expense" />
+                    <CategoryIcon
+                      type={transaction.type === 'EXPENSE' ? 'expense' : 'income'}
+                      category={transaction.category?.icon}
+                    />
 
                     <div>
-                      <strong className="font-bold tracking-[-0.5px] block">Almoço</strong>
-                      <span className="text-sm text-gray-600">04/04/2023</span>
+                      <strong className="font-bold tracking-[-0.5px] block">
+                        {transaction.name}
+                      </strong>
+                      <span className="text-sm text-gray-600">
+                        {formatDate(new Date(transaction.date))}
+                      </span>
                     </div>
                   </div>
 
                   <span
                     className={cn(
-                      'text-red-800 tracking-[-0.5px] font-medium',
-                      !areValuesVisible && 'blur-sm'
+                      'tracking-[-0.5px] font-medium',
+                      transaction.type === 'EXPENSE' ? 'text-red-800' : 'text-green-800',
+                      !areValuesVisible && 'blur-sm',
                     )}
                   >
-                    -{formatCurrency(1320.0)}
+                    {transaction.type === 'EXPENSE' ? '- ' : '+ '}
+                    {formatCurrency(transaction.value)}
                   </span>
                 </div>
-
-                <div className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4">
-                  <div className="flex flex-1 items-center gap-3">
-                    <CategoryIcon type="income" />
-
-                    <div>
-                      <strong className="font-bold tracking-[-0.5px] block">Almoço</strong>
-                      <span className="text-sm text-gray-600">04/04/2023</span>
-                    </div>
-                  </div>
-
-                  <span
-                    className={cn(
-                      'text-grenn-800 tracking-[-0.5px] font-medium',
-                      !areValuesVisible && 'blur-sm'
-                    )}
-                  >
-                    {formatCurrency(1320.0)}
-                  </span>
-                </div>
-              </>
-            )}
+              ))}
           </div>
         </>
       )}
