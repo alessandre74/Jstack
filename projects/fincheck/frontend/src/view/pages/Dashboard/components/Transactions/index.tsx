@@ -16,6 +16,7 @@ import { FilterIcon } from '../../../../components/icons/FilterIcon'
 
 import { formatDate } from '../../../../../app/utils/formatDate'
 import { CategoryIcon } from '../../../../components/icons/categories/CategoryIcon'
+import { EditTransactionModal } from '../../modals/EditTransactionModal'
 import { FiltersModal } from './FiltersModal'
 
 export function Transactions() {
@@ -30,6 +31,10 @@ export function Transactions() {
     handleChangeFilters,
     filters,
     handleApplyFilters,
+    isEditModalOpen,
+    transactionBeingEdited,
+    handleOpenEditModal,
+    handleCloseEditModal,
   } = useTransactionsController()
 
   const hasTransactions = transactions.length > 0
@@ -97,41 +102,52 @@ export function Transactions() {
               </div>
             )}
 
-            {hasTransactions &&
-              !isLoading &&
-              transactions.map((transaction) => (
-                <div
-                  key={transaction.id}
-                  className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4"
-                >
-                  <div className="flex flex-1 items-center gap-3">
-                    <CategoryIcon
-                      type={transaction.type === 'EXPENSE' ? 'expense' : 'income'}
-                      category={transaction.category?.icon}
-                    />
-
-                    <div>
-                      <strong className="font-bold tracking-[-0.5px] block">
-                        {transaction.name}
-                      </strong>
-                      <span className="text-sm text-gray-600">
-                        {formatDate(new Date(transaction.date))}
-                      </span>
-                    </div>
-                  </div>
-
-                  <span
-                    className={cn(
-                      'tracking-[-0.5px] font-medium',
-                      transaction.type === 'EXPENSE' ? 'text-red-800' : 'text-green-800',
-                      !areValuesVisible && 'blur-sm',
-                    )}
+            {hasTransactions && !isLoading && (
+              <>
+                {transactionBeingEdited && (
+                  <EditTransactionModal
+                    open={isEditModalOpen}
+                    onClose={handleCloseEditModal}
+                    transaction={transactionBeingEdited}
+                  />
+                )}
+                {transactions.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    className="bg-white p-4 rounded-2xl flex items-center justify-between gap-4"
+                    role="button"
+                    onClick={() => handleOpenEditModal(transaction)}
                   >
-                    {transaction.type === 'EXPENSE' ? '- ' : '+ '}
-                    {formatCurrency(transaction.value)}
-                  </span>
-                </div>
-              ))}
+                    <div className="flex flex-1 items-center gap-3">
+                      <CategoryIcon
+                        type={transaction.type === 'EXPENSE' ? 'expense' : 'income'}
+                        category={transaction.category?.icon}
+                      />
+
+                      <div>
+                        <strong className="font-bold tracking-[-0.5px] block">
+                          {transaction.name}
+                        </strong>
+                        <span className="text-sm text-gray-600">
+                          {formatDate(new Date(transaction.date))}
+                        </span>
+                      </div>
+                    </div>
+
+                    <span
+                      className={cn(
+                        'tracking-[-0.5px] font-medium',
+                        transaction.type === 'EXPENSE' ? 'text-red-800' : 'text-green-800',
+                        !areValuesVisible && 'blur-sm',
+                      )}
+                    >
+                      {transaction.type === 'EXPENSE' ? '- ' : '+ '}
+                      {formatCurrency(transaction.value)}
+                    </span>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </>
       )}

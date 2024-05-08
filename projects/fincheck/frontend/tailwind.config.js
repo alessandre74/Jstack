@@ -14,7 +14,7 @@ export default {
           600: '#868E96',
           700: '#495057',
           800: '#343A40',
-          900: '#212529'
+          900: '#212529',
         },
 
         red: {
@@ -27,7 +27,7 @@ export default {
           600: '#FA5252',
           700: '#F03E3E',
           800: '#E03131',
-          900: '#C92A2A'
+          900: '#C92A2A',
         },
 
         pink: {
@@ -40,7 +40,7 @@ export default {
           600: '#E64980',
           700: '#D6336C',
           800: '#C2255C',
-          900: '#A61E4D'
+          900: '#A61E4D',
         },
 
         grape: {
@@ -53,7 +53,7 @@ export default {
           600: '#BE4BDB',
           700: '#AE3EC9',
           800: '#9C36B5',
-          900: '#862E9C'
+          900: '#862E9C',
         },
 
         violet: {
@@ -66,7 +66,7 @@ export default {
           600: '#7950F2',
           700: '#7048E8',
           800: '#6741D9',
-          900: '#5F3DC4'
+          900: '#5F3DC4',
         },
 
         indigo: {
@@ -79,7 +79,7 @@ export default {
           600: '#4C6EF5',
           700: '#4263EB',
           800: '#3B5BDB',
-          900: '#364FC7'
+          900: '#364FC7',
         },
 
         blue: {
@@ -92,7 +92,7 @@ export default {
           600: '#228BE6',
           700: '#1C7ED6',
           800: '#1971C2',
-          900: '#1864AB'
+          900: '#1864AB',
         },
 
         cyan: {
@@ -105,7 +105,7 @@ export default {
           600: '#15AABF',
           700: '#1098AD',
           800: '#0C8599',
-          900: '#0B7285'
+          900: '#0B7285',
         },
 
         teal: {
@@ -118,7 +118,7 @@ export default {
           600: '#12B886',
           700: '#0CA678',
           800: '#099268',
-          900: '#087F5B'
+          900: '#087F5B',
         },
 
         green: {
@@ -131,7 +131,7 @@ export default {
           600: '#40C057',
           700: '#37B24D',
           800: '#2F9E44',
-          900: '#2B8A3E'
+          900: '#2B8A3E',
         },
 
         lime: {
@@ -144,7 +144,7 @@ export default {
           600: '#82C91E',
           700: '#74B816',
           800: '#66A80F',
-          900: '#5C940D'
+          900: '#5C940D',
         },
 
         yellow: {
@@ -157,7 +157,7 @@ export default {
           600: '#FAB005',
           700: '#F59F00',
           800: '#F08C00',
-          900: '#E67700'
+          900: '#E67700',
         },
 
         orange: {
@@ -170,34 +170,37 @@ export default {
           600: '#FD7E14',
           700: '#F76707',
           800: '#E8590C',
-          900: '#D9480F'
-        }
+          900: '#D9480F',
+        },
       },
       keyframes: {
         slideUpAndFade: {
           from: { opacity: 0, transform: 'translateY(2px)' },
-          to: { opacity: 1, transform: 'translateY(0)' }
+          to: { opacity: 1, transform: 'translateY(0)' },
         },
         slideDownAndFade: {
           from: { opacity: 0, transform: 'translateY(-2px)' },
-          to: { opacity: 1, transform: 'translateY(0)' }
+          to: { opacity: 1, transform: 'translateY(0)' },
         },
         overlayShow: {
           from: { opacity: 0 },
-          to: { opacity: 1 }
+          to: { opacity: 1 },
         },
         contentShow: {
           from: { opacity: 0, transform: 'translate(-50%, -48%) scale(0.96)' },
-          to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' }
-        }
+          to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+        },
       },
       animation: {
         'slide-up-and-fade': 'slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)',
         'slide-down-and-fade': 'slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)',
         'overlay-show': 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
-        'content-show': 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)'
-      }
-    }
+        'content-show': 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+      fontFamily: {
+        sans: ['DM Sans', 'sans-serif'],
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }
